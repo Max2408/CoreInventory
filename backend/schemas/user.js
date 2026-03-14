@@ -6,6 +6,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    role: {
+        type: String,
+        default: "unverified"
+    },
     email: {
         type: String,
         required: true,

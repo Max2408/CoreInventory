@@ -10,13 +10,16 @@ const transfer = require('./router/transfer');
 const adjustment = require('./router/adjustment');
 const dashboard = require('./router/dashboard');
 
+const { protectedAuth } = require('../middlewares/auth')
+
 router.use('/auth', auth);
-router.use('/product', product);
-router.use('/warehouse', warehouse);
-router.use('/receipts', receipts);
-router.use('/delivery', delivery);
-router.use('/adjustment', adjustment);
-router.use('/transfer', transfer);
-router.use('/dashboard', dashboard);
+
+router.use('/product', protectedAuth, product);
+router.use('/warehouse', protectedAuth, warehouse);
+router.use('/receipts', protectedAuth, receipts);
+router.use('/delivery', protectedAuth, delivery);
+router.use('/adjustment', protectedAuth, adjustment);
+router.use('/transfer', protectedAuth, transfer);
+router.use('/dashboard', protectedAuth, dashboard);
 
 module.exports = router;

@@ -35,9 +35,14 @@ exports.register = async (req, res) => {
     const salt = await bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
 
+    let admin = false;
+    let usersCount = await User.countDocuments();
+    if(usersCount === 0) admin = true;
+
     const data = await User.create({
         loginId: loginId,
         email: email,
+        role: admin?'primary-admin':"unverified",
         password: hashedPassword
     });
 
@@ -75,4 +80,34 @@ exports.login = async (req, res) => {
 
 
     return res.status(200).json({ status : "Success" });
+}
+
+exports.editRole = async(req, res) => {
+    if(!["admin", "primary-admin"].includes(req.user.role)) {
+        return res.status(401).json({ status: "Unauthorized", message: "Admin Access Only." });
+    }
+
+    let userId = req.body.userId;
+
+    if(!userId) {
+        return res.status(200).json({ status: "error", message: "Missing Arguments." });
+    }
+
+    let user = await User.findOne({ _id : userId });
+
+    if(!user) {
+        return res.status(200).json({ status: "error", message: "Invaild User ID." });
+    }
+
+    let { role } = req.body;
+
+    let roles = ["staff", "admin", "manager"];
+
+    if(!roles.includes(role)) {
+        return res.status(200).json({ status: "error", message: "Invaild Role." });
+    }
+
+    await User.findOneAndUpdate({ _id : userId }, { role: role });
+
+    return res.status(200).json({ status:"Success" });
 }
