@@ -2,6 +2,7 @@ const Warehouse = require("../schemas/warehouse");
 const Product = require("../schemas/product");
 const Stock = require("../schemas/stock");
 const Receipts = require("../schemas/receipts");
+const StockMove = require("../schemas/stockMove");
 
 exports.createOrder = async (req, res) => {
     let { warehouseId, products, supplier } = req.body;
@@ -205,7 +206,16 @@ exports.validateOrder = async(req, res) => {
                 quantity: stock.quantity + receipt.products[i].quantity
             });
         }
+
+        await StockMove.create({
+            type: "receipt",
+            productId: receipt.products[i].productId,
+            warehouseId: receipt.warehouseId,
+            quantityChange: `+${receipt.products[i].quantity}`,
+            referenceId: receipt._id
+        });
     }
+
 
     await Receipts.findOneAndUpdate({ _id : id }, { status: "done" });
     return res.status(200).json({ status : "Success" });
