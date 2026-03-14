@@ -4,17 +4,17 @@ const bcrypt = require('bcryptjs');
 const User = require('../schemas/user');
 
 exports.register = async (req, res) => {
-    let { loginId, email, password } = req.body;
+    const { loginId, email, password } = req.body;
 
     if(!loginId || !email || !password) {
         return res.status(400).json({ status : "Error", error :"Missing Arugments." });
     }
 
-    let loginIdUniqueCheck = await User.findOne({ loginId: loginId });
+    const loginIdUniqueCheck = await User.findOne({ loginId: loginId });
 
     if(loginIdUniqueCheck) return  res.status(200).json({ status : "Error", error :"Login Id Already Exist." });
 
-    let emailUniqueCheck = await User.findOne({ email: email });
+    const emailUniqueCheck = await User.findOne({ email: email });
 
     if(emailUniqueCheck) return  res.status(200).json({ status : "Error", error :"Email Already Exist." });
 
@@ -32,10 +32,10 @@ exports.register = async (req, res) => {
         return  res.status(400).json({ status : "Error", error :"Password must contain atleast 1 number, 1 small case, 1 large case and a special character." });
     }
 
-    let salt = await bcrypt.genSaltSync(10);
-    let hashedPassword = bcrypt.hashSync(password, salt);
+    const salt = await bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(password, salt);
 
-    let data = await User.create({
+    const data = await User.create({
         loginId: loginId,
         email: email,
         password: hashedPassword
@@ -48,17 +48,17 @@ exports.register = async (req, res) => {
         maxAge : 24 * 60 * 60 * 1000 * 30
     })
 
-    return res.status(200).json({ status : "Success" });
+    return res.status(201).json({ status : "Success" });
 }
 
 exports.login = async (req, res) => {
-    let { loginId, password } = req.body;
+    const { loginId, password } = req.body;
 
     if(!loginId || !password) {
         return res.status(400).json({ status : "Error", error :"Missing Arugments." });
     }
 
-    let user = await User.findOne({ loginId: loginId });
+    const user = await User.findOne({ loginId: loginId });
 
     if(!user) return res.status(200).json({ status : "Error", error :"Invalid Login Id or Password." });
 
