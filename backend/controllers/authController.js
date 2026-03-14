@@ -50,3 +50,29 @@ exports.register = async (req, res) => {
 
     return res.status(200).json({ status : "Success" });
 }
+
+exports.login = async (req, res) => {
+    let { loginId, password } = req.body;
+
+    if(!loginId || !password) {
+        return res.status(400).json({ status : "Error", error :"Missing Arugments." });
+    }
+
+    let user = await User.findOne({ loginId: loginId });
+
+    if(!user) return res.status(200).json({ status : "Error", error :"Invalid Login Id or Password." });
+
+     if(!await bcrypt.compare(password , user.password)) {
+        return res.status(200).json({ status : "Error", error :"Invalid Email or Password." });
+    }
+
+    const token = jwt.sign({_id : user._id } , `${process.env.JWT_SECRET}`)
+
+    res.cookie("jwt" , token, {
+        httpOnly : process.env.ENVIRONMENT === "dev" ? false : true,
+        maxAge : 24 * 60 * 60 * 1000 * 30
+    })
+
+
+    return res.status(200).json({ status : "Success" });
+}
