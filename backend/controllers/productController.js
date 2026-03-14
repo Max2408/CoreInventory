@@ -1,9 +1,10 @@
+const config = require('../config.json')
 const Product = require("../schemas/product");
 
 exports.createProduct = async (req, res) => {
-    const { name, sku, category, reorderLevel, perHandCost } = req.body;
+    const { name, sku, category, perHandCost } = req.body;
     
-    if(!name || !sku || !category || !reorderLevel || !perHandCost) {
+    if(!name || !sku || !category || !perHandCost) {
         return res.status(400).json({ status : "Error", error :"Missing Arugments." });
     }
 
@@ -13,15 +14,11 @@ exports.createProduct = async (req, res) => {
         return res.status(400).json({ status : "Error", error: "SKU already exists." });
     }
 
-    if (reorderLevel < 0) {
-        return res.status(400).json({ status : "Error", error: "Reorder level cannot be negative." });
-    }
-
     await Product.create({
         name: name,
         sku: sku,
         category: category,
-        reorderLevel: reorderLevel,
+        reorderLevel: config.RE_ORDER_LEVEL,
         perHandCost: perHandCost,
         stock: stock
     });
@@ -57,7 +54,7 @@ exports.getProduct = async(req, res) => {
 
 exports.updateProduct = async(req, res) => {
     const id = req.params.id
-    const { name, sku, category, reorderLevel, perHandCost } = req.body;
+    const { name, sku, category, perHandCost } = req.body;
 
     const product = await Product.findOne({ _id : id });
 
@@ -65,15 +62,10 @@ exports.updateProduct = async(req, res) => {
         return res.status(400).json({ status : "Error", error: "Invaild ID." });
     }
 
-     if (reorderLevel < 0) {
-        return res.status(400).json({ status : "Error", error: "Reorder level cannot be negative." });
-    }
-
     await Product.findOneAndUpdate({ _id : id }, {
         name: name?name:product.name,
         sku: sku?sku:product.sku,
         category: category?category:product.category,
-        reorderLevel: reorderLevel?reorderLevel:product.reorderLevel,
         perHandCost: perHandCost?perHandCost:product.perHandCost,
         updatedAt: new Date
     });
