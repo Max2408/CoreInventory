@@ -32,7 +32,7 @@ const productSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         default: new Date
-    },
+    }
 },
 {
     versionKey: false
