@@ -6,11 +6,13 @@ const product = require('./router/product');
 const warehouse = require('./router/warehouse');
 const receipts = require('./router/receipts');
 const delivery = require('./router/delivery');
+const transfer = require('./router/transfer');
 
 router.use('/auth', auth);
 router.use('/product', product);
 router.use('/warehouse', warehouse);
 router.use('/receipts', receipts);
 router.use('/delivery', delivery);
+router.use('/transfer', transfer);
 
 module.exports = router;
