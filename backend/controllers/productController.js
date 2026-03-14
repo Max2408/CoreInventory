@@ -1,9 +1,9 @@
 const Product = require("../schemas/product");
 
 exports.createProduct = async (req, res) => {
-    const { name, sku, category, reorderLevel, perHandCost, stock } = req.body;
+    const { name, sku, category, reorderLevel, perHandCost } = req.body;
     
-    if(!name || !sku || !category || !reorderLevel || !perHandCost || !stock) {
+    if(!name || !sku || !category || !reorderLevel || !perHandCost) {
         return res.status(400).json({ status : "Error", error :"Missing Arugments." });
     }
 
@@ -15,10 +15,6 @@ exports.createProduct = async (req, res) => {
 
     if (reorderLevel < 0) {
         return res.status(400).json({ status : "Error", error: "Reorder level cannot be negative." });
-    }
-
-    if (stock < 0) {
-        return res.status(400).json({ status : "Error", error: "Initial stock cannot be negative." });
     }
 
     await Product.create({
@@ -61,7 +57,7 @@ exports.getProduct = async(req, res) => {
 
 exports.updateProduct = async(req, res) => {
     const id = req.params.id
-    const { name, sku, category, reorderLevel, perHandCost, stock } = req.body;
+    const { name, sku, category, reorderLevel, perHandCost } = req.body;
 
     const product = await Product.findOne({ _id : id });
 
@@ -73,17 +69,12 @@ exports.updateProduct = async(req, res) => {
         return res.status(400).json({ status : "Error", error: "Reorder level cannot be negative." });
     }
 
-    if (stock < 0) {
-        return res.status(400).json({ status : "Error", error: "Initial stock cannot be negative." });
-    }
-
     await Product.findOneAndUpdate({ _id : id }, {
         name: name?name:product.name,
         sku: sku?sku:product.sku,
         category: category?category:product.category,
         reorderLevel: reorderLevel?reorderLevel:product.reorderLevel,
         perHandCost: perHandCost?perHandCost:product.perHandCost,
-        stock: stock?stock:product.stock,
         updatedAt: new Date
     });
 
