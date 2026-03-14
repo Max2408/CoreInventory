@@ -11,7 +11,6 @@ exports.createOrder = async (req, res) => {
         return res.status(400).json({ status : "Error", error :"Missing Arugments." });
     }
 
-
     let warehouse
     try {
         warehouse = await Warehouse.findOne({ _id : warehouseId });
@@ -62,20 +61,6 @@ exports.createOrder = async (req, res) => {
             productId: products[i].productId,
             quantity: products[i].quantity
         })
-
-        // let stock = await Stock.findOne({ productId: products[i].productId, warehouseId: warehouseId });
-
-        // if(!stock) {
-        //     await Stock.create({
-        //         productId: products[i].productId,
-        //         warehouseId: warehouseId,
-        //         quantity: products[i].quantity
-        //     });
-        // } else {
-        //     await Stock.findOneAndUpdate({ productId: products[i].productId, warehouseId: warehouseId }, {
-        //         quantity: stock.quantity + products[i].quantity
-        //     });
-        // }
     }
 
     await Receipts.create({
