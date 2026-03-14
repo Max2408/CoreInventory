@@ -82,12 +82,6 @@ exports.login = async (req, res) => {
     return res.status(200).json({ status : "Success" });
 }
 
-exports.logout = async (req, res) => {
-    res.clearCookie("jwt");
-
-    return res.status(200).json({ status: "Success" });
-}
-
 exports.editRole = async(req, res) => {
     if(!["admin", "primary-admin"].includes(req.user.role)) {
         return res.status(401).json({ status: "Unauthorized", message: "Admin Access Only." });
