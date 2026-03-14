@@ -1,0 +1,26 @@
+{
+  "name": "core-inventory-backend",
+  "version": "0.0.1",
+  "description": "A Inventory Management System",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon .",
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Max2408/CoreInventory.git"
+  },
+  "author": "Max2408 <jobanputramahir@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Max2408/CoreInventory/issues"
+  },
+  "homepage": "https://github.com/Max2408/CoreInventory#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
