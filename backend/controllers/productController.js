@@ -2,13 +2,19 @@ const config = require('../config.json')
 const Product = require("../schemas/product");
 
 exports.createProduct = async (req, res) => {
-    const { name, sku, category, perHandCost } = req.body;
+    const { name, sku, category, perHandCost, unitOfMeasure} = req.body;
     
     if(!name || !sku || !category || !perHandCost) {
         return res.status(400).json({ status : "Error", error :"Missing Arugments." });
     }
 
     const existingSKU = await Product.findOne({ sku });
+
+    const measures = ["kg", "litres", "pcs", "meters", "box"]
+
+    if(!measures.includes(unitOfMeasure)) {
+        return res.status(400).json({ status : "Error", error :"Invaild Unit of Measure." });
+    }
 
     if (existingSKU) {
         return res.status(400).json({ status : "Error", error: "SKU already exists." });
@@ -20,7 +26,8 @@ exports.createProduct = async (req, res) => {
         category: category,
         reorderLevel: config.RE_ORDER_LEVEL,
         perHandCost: perHandCost,
-        stock: stock
+        stock: stock,
+        unitOfMeasure: unitOfMeasure
     });
   
     return res.status(201).json({ status : "Success" });
