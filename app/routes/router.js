@@ -9,8 +9,11 @@ const delivery = require('./router/delivery');
 const transfer = require('./router/transfer');
 const adjustment = require('./router/adjustment');
 const dashboard = require('./router/dashboard');
+const views = require('./router/views')
 
 const { protectedAuth } = require('../middlewares/auth')
+
+router.use('/', views)
 
 router.use('/auth', auth);
 

@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="/styles/login.css"> <!-- external CSS file -->
+  </head>
+  <body>
+    <div class="login-box">
+      <img src="/images/ims-logo.png" alt="IMS Logo" class="ims-logo" />
+      <h2>Login</h2>
+      <form action="/auth/login" method="POST">
+        <input type="text" name="loginId" placeholder="Login ID" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <input type="submit" value="LOGIN" />
+      </form>
+      <div class="links">
+        <a id="forgotLink">Forget Password?</a> | 
+        <!-- Redirect to signup.html -->
+        <a href="/register" id="signupLink">Sign Up</a>
+      </div>
+    </div>
+
+    <!-- Forgot Password Modal (kept as-is) -->
+    <div id="forgotModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeForgot">&times;</span>
+        <h3>Forgot Password</h3>
+        <form action="/forgot-password" method="POST">
+          <input type="email" name="email" placeholder="Enter Email" required />
+          <input type="submit" value="Send OTP" />
+        </form>
+      </div>
+    </div>
+
+    <script src="/scripts/login.js"></script> <!-- external JS file -->
+  </body>
+</html>
